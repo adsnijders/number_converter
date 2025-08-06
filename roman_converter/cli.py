@@ -105,7 +105,7 @@ def rom_to_ar_conv(
 
     # Print result
     typer.echo(f"Arabic number: {tot}")
-    return tot
+    return str(tot)
 
 # Define a function for converting Arabic numbers to Roman numerals
 @app.command("ar-to-rom")
@@ -138,7 +138,7 @@ def ar_to_rom_conv(inp_nr: int=typer.Argument(..., help="The Arabic numeral to c
     
     # Print result
     typer.echo(f"Roman numeral: {rom_nr.upper()}")
-    return rom_nr.upper()
+    return rom_nr
 
 if __name__ == "__main__":
     app()
