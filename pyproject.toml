@@ -7,7 +7,6 @@ readme = "README.md"
 requires-python = ">=3.7"
 dependencies = [
     "typer[all]",
-    "numpy"
 ]
 
 [build-system]
