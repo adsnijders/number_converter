@@ -1,7 +1,6 @@
 # Import modules
 import typer
 import re
-import numpy as np
 
 # Initialize app
 app = typer.Typer(help="Convert numerals between Roman and Arabic numeral systems")
@@ -58,22 +57,16 @@ def val_ar_inp(ar_inp: str | int) -> None:
         raise typer.BadParameter("Input must be an integer or a string convertible to an integer")
     
     # inp_nr cannot be negative
-    if ar_inp <= 0:
-        typer.echo("Roman numerals must be positive integers")
-        raise typer.Exit(code=1)
+    if ar_inp <= 0 or ar_inp >= 4000:
+        raise typer.BadParameter("Roman numerals must be positive integers and below 4000")
     
     return ar_inp
     
 # Define a function for converting Roman numerals to Arabic numbers
-@app.command("rom-to-ar")
-def rom_to_ar_conv(
-    inp_nr: str=typer.Argument(..., help='The Roman numeral to convert (e.g., "XI")')) -> str:
+def rom_to_ar_conv(inp_nr: str) -> int:
     """
     Convert a Roman numeral to an Arabic number
     """
-    # Validate the input
-    val_rom_inp(inp_nr)
-
     # Strip input and convert to lowercase
     inp_nr = inp_nr.lower().strip()
 
@@ -103,19 +96,30 @@ def rom_to_ar_conv(
         # Add the length of the roman number to "idx"
         idx += len(finds[max_find_idx])
 
+    # Return result
+    return tot
+
+# Define a function for putting the Roman to Arabic converter together
+@app.command("rom-to-ar")
+def rom_to_ar_eng(inp_nr: str=typer.Argument(..., help='The Roman numeral to convert (e.g., "XI")')) -> str:
+    """
+    Puts the Roman to Arabic converter together
+    """
+    # Validate the input
+    val_rom_inp(inp_nr)
+
+    # Run rom_to_ar_conv
+    tot = rom_to_ar_conv(inp_nr)
+
     # Print result
     typer.echo(f"Arabic number: {tot}")
-    return str(tot)
+    return tot
 
 # Define a function for converting Arabic numbers to Roman numerals
-@app.command("ar-to-rom")
-def ar_to_rom_conv(inp_nr: int=typer.Argument(..., help="The Arabic numeral to convert (e.g., 44)")) -> str:
+def ar_to_rom_conv(inp_nr: int) -> str:
     """
     Convert an Arabic number to a Roman numeral
     """
-    # Validate the input
-    inp_nr = val_ar_inp(inp_nr)
-
     # Define the remainder
     remain = inp_nr
 
@@ -136,8 +140,23 @@ def ar_to_rom_conv(inp_nr: int=typer.Argument(..., help="The Arabic numeral to c
         # Update the roman numeral
         rom_nr += ar_to_rom[max_substr]
     
+    # Return the result
+    return rom_nr.upper()
+
+# Define a function for putting the Arabic to Roman converter together
+@app.command("ar-to-rom")
+def ar_to_rom_eng(inp_nr: int=typer.Argument(..., help="The Arabic numeral to convert (e.g., 44)")) -> str:
+    """
+    Puts the Arabic to Roman converter together
+    """
+    # Validate the input
+    inp_nr = val_ar_inp(inp_nr)
+
+    # Run ar_to_rom_conv
+    rom_nr = ar_to_rom_conv(inp_nr)
+
     # Print result
-    typer.echo(f"Roman numeral: {rom_nr.upper()}")
+    typer.echo(f"Roman numeral: {rom_nr}")
     return rom_nr
 
 if __name__ == "__main__":
