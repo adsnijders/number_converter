@@ -3,7 +3,7 @@ import typer
 import re
 
 # Initialize app
-app = typer.Typer(help="Convert numerals between Roman and Arabic numeral systems")
+app = typer.Typer(help="Convert numerals between Roman and Arabic numeral systems.")
 
 # Define Roman to Arabic mapping
 rom_to_ar = {
@@ -28,44 +28,44 @@ ar_to_rom = {ar_nr: rom_nr for rom_nr, ar_nr in rom_to_ar.items()}
 # Define a function to validate the Roman input
 def val_rom_inp(rom_inp: str) -> None:
     """
-    Validate the input for rom_to_ar_conv
+    Validate the input for rom_to_ar_conv.
     """
     # The input must be a string
     if not isinstance(rom_inp, str):
-        raise typer.BadParameter("Input must be a string")
+        raise typer.BadParameter("Input must be a string.")
     
     # Convert the input to lowercase
     rom_inp = rom_inp.lower()
     
     # Reject more than 3 of the same numeral in a row
     if re.search(r"(i{4,}|x{4,}|c{4,}|m{4,})", rom_inp):
-        raise typer.BadParameter("Invalid Roman numeral: cannot repeat the same numeral for more than three times")
+        raise typer.BadParameter("Invalid Roman numeral: cannot repeat the same numeral for more than three times.")
     
     # Allow only valid characters
     if not re.fullmatch(r"[ivxlcdm]+", rom_inp):
-        raise typer.BadParameter("Input contains invalid Roman numeral")
+        raise typer.BadParameter("Input contains invalid Roman numeral.")
     
 # Define a function to validate the Arabic input
 def val_ar_inp(ar_inp: str | int) -> None:
     """
-    Validate the input for ar_to_rom_conv
+    Validate the input for ar_to_rom_conv.
     """
     # The input must be an integer or a string convertible to an integer
     try:
         ar_inp = int(ar_inp)
     except ValueError:
-        raise typer.BadParameter("Input must be an integer or a string convertible to an integer")
+        raise typer.BadParameter("Input must be an integer or a string convertible to an integer.")
     
     # inp_nr cannot be negative
     if ar_inp <= 0 or ar_inp >= 4000:
-        raise typer.BadParameter("Roman numerals must be positive integers and below 4000")
+        raise typer.BadParameter("Roman numerals must be positive integers and below 4000.")
     
     return ar_inp
     
 # Define a function for converting Roman numerals to Arabic numbers
 def rom_to_ar_conv(inp_nr: str) -> int:
     """
-    Convert a Roman numeral to an Arabic number
+    Convert a Roman numeral to an Arabic number.
     """
     # Strip input and convert to lowercase
     inp_nr = inp_nr.lower().strip()
@@ -101,9 +101,9 @@ def rom_to_ar_conv(inp_nr: str) -> int:
 
 # Define a function for putting the Roman to Arabic converter together
 @app.command("rom-to-ar")
-def rom_to_ar_eng(inp_nr: str=typer.Argument(..., help='The Roman numeral to convert (e.g., "XI")')) -> str:
+def rom_to_ar_eng(inp_nr: str=typer.Argument(..., help='The Roman numeral to convert (e.g., "XI").')) -> str:
     """
-    Puts the Roman to Arabic converter together
+    Puts the Roman to Arabic converter together.
     """
     # Validate the input
     val_rom_inp(inp_nr)
@@ -118,7 +118,7 @@ def rom_to_ar_eng(inp_nr: str=typer.Argument(..., help='The Roman numeral to con
 # Define a function for converting Arabic numbers to Roman numerals
 def ar_to_rom_conv(inp_nr: int) -> str:
     """
-    Convert an Arabic number to a Roman numeral
+    Convert an Arabic number to a Roman numeral.
     """
     # Define the remainder
     remain = inp_nr
@@ -145,9 +145,9 @@ def ar_to_rom_conv(inp_nr: int) -> str:
 
 # Define a function for putting the Arabic to Roman converter together
 @app.command("ar-to-rom")
-def ar_to_rom_eng(inp_nr: int=typer.Argument(..., help="The Arabic numeral to convert (e.g., 44)")) -> str:
+def ar_to_rom_eng(inp_nr: int=typer.Argument(..., help="The Arabic numeral to convert (e.g., 44).")) -> str:
     """
-    Puts the Arabic to Roman converter together
+    Puts the Arabic to Roman converter together.
     """
     # Validate the input
     inp_nr = val_ar_inp(inp_nr)
@@ -159,5 +159,6 @@ def ar_to_rom_eng(inp_nr: int=typer.Argument(..., help="The Arabic numeral to co
     typer.echo(f"Roman numeral: {rom_nr}")
     return rom_nr
 
+# Main guard
 if __name__ == "__main__":
     app()
